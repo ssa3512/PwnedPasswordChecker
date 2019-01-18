@@ -21,7 +21,7 @@ namespace PwnedPasswordChecker.Test
             PwnedPasswordClient._httpHandler = mockClient.Object;
 
             var results = new PwnedPasswordClient().GetPasswordResults("21BD1");
-
+            
             Assert.Equal(KnownPwnedPasswords.PwnedPasswords.Values, results);
 
         }

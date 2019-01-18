@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -17,12 +18,12 @@ namespace PwnedPasswordChecker
             _httpHandler.BaseAddress = new Uri("https://api.pwnedpasswords.com/");
         }
 
-        public IEnumerable<PwnedPassword> GetPasswordResults(string shaHash)
+        public KeyedCollection<string, PwnedPassword> GetPasswordResults(string shaHash)
         {
             return GetPasswordResultsAsync(shaHash).Result;
         }
 
-        public async Task<IEnumerable<PwnedPassword>> GetPasswordResultsAsync(string shaHash)
+        public async Task<KeyedCollection<string, PwnedPassword>> GetPasswordResultsAsync(string shaHash)
         {
             string prefix = shaHash.ToUpper().Substring(0, 5);
 
@@ -35,7 +36,7 @@ namespace PwnedPasswordChecker
 
             string results = await response.Content.ReadAsStringAsync();
             var resultsArray = results.Replace("\n","").Split('\r');
-            return resultsArray.Select(result => new PwnedPassword(prefix, result));
+            return new PwnedPasswordList(resultsArray.Select(result => new PwnedPassword(prefix, result)));
         }
     }
 }

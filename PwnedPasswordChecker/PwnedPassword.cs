@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Collections.ObjectModel;
 
 namespace PwnedPasswordChecker
 {
@@ -40,4 +40,23 @@ namespace PwnedPasswordChecker
                 && other.TimesPwned == TimesPwned;
         }
     }
+
+    public class PwnedPasswordList : KeyedCollection<string, PwnedPassword>
+    {
+        public PwnedPasswordList()
+        {
+
+        }
+
+        public PwnedPasswordList(IEnumerable<PwnedPassword> pwnedPasswords)
+        {
+            foreach (var pwnedPassword in pwnedPasswords)
+            {
+                Add(pwnedPassword);
+            }
+        }
+
+        protected override string GetKeyForItem(PwnedPassword item) => item.Hash;
+    }
+
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PwnedPasswordChecker
 {
-    public class HttpClientHandler : IHttpHandler
+    internal class HttpClientHandler : IHttpHandler
     {
         private HttpClient _client = new HttpClient();
 

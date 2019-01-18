@@ -6,8 +6,9 @@ namespace PwnedPasswordChecker
 {
     public class PasswordResult
     {
-        DateTimeOffset LastUpdateDate { get; set; }
-        bool IsPwned { get; set; }
-        int TimesPwned { get; set; }
+        public string PasswordHash { get; set; }
+        public bool IsPwned { get; set; }
+        public int TimesPwned { get; set; }
+        public PwnedLevel PwnedLevel { get; set; }
     }
 }

@@ -14,8 +14,7 @@ namespace PwnedPasswordChecker
 
         static PwnedPasswordClient()
         {
-            _httpHandler = new HttpClientHandler();
-            _httpHandler.BaseAddress = new Uri("https://api.pwnedpasswords.com/");
+            _httpHandler = new HttpClientHandler("https://api.pwnedpasswords.com/");
         }
 
         public KeyedCollection<string, PwnedPassword> GetPasswordResults(string shaHash)
@@ -25,18 +24,26 @@ namespace PwnedPasswordChecker
 
         public async Task<KeyedCollection<string, PwnedPassword>> GetPasswordResultsAsync(string shaHash)
         {
-            string prefix = shaHash.ToUpper().Substring(0, 5);
+            if (shaHash is null)
+                throw new ArgumentNullException(nameof(shaHash));
 
+            if (shaHash.Length < 5)
+                throw new ArgumentException("shaHash prefix must be at least five characters");
+
+            string prefix = shaHash.Substring(0, 5);
             var response = await _httpHandler.GetAsync($"range/{prefix}");
+            string results = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("Error response received from server");
+                throw new ApplicationException($"Error response received from server: {results}");
             }
 
-            string results = await response.Content.ReadAsStringAsync();
             var resultsArray = results.Replace("\n","").Split('\r');
-            return new PwnedPasswordList(resultsArray.Select(result => new PwnedPassword(prefix, result)));
+
+            var pwnedPasswords = new PwnedPasswordList();
+            pwnedPasswords.AddRange(resultsArray.Select(result => new PwnedPassword(prefix, result)));
+            return pwnedPasswords;
         }
     }
 }

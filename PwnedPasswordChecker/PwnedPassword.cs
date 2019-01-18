@@ -11,12 +11,15 @@ namespace PwnedPasswordChecker
 
         public PwnedPassword(string hashPrefix, string apiResult)
         {
-            var split = apiResult.Split(':');
             int timesPwned = 0;
-            int.TryParse(split[1], out timesPwned);
+            if (apiResult?.Contains(":") == true)
+            {
+                var split = apiResult.Split(':');
+                _hashSuffix = split[0];
+                int.TryParse(split[1], out timesPwned);
+            }
 
             _hashPrefix = hashPrefix;
-            _hashSuffix = split[0];
             TimesPwned = timesPwned;
         }
 
@@ -50,7 +53,12 @@ namespace PwnedPasswordChecker
 
         public PwnedPasswordList(IEnumerable<PwnedPassword> pwnedPasswords)
         {
-            foreach (var pwnedPassword in pwnedPasswords)
+            AddRange(pwnedPasswords);
+        }
+
+        public void AddRange(IEnumerable<PwnedPassword> pwnedPasswords)
+        {
+            foreach(var pwnedPassword in pwnedPasswords)
             {
                 Add(pwnedPassword);
             }

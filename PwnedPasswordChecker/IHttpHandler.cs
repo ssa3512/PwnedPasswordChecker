@@ -8,7 +8,6 @@ namespace PwnedPasswordChecker
 {
     public interface IHttpHandler
     {
-        Uri BaseAddress { get; set; }
         HttpResponseMessage Get(string url);
         HttpResponseMessage Post(string url, HttpContent content);
         Task<HttpResponseMessage> GetAsync(string url);

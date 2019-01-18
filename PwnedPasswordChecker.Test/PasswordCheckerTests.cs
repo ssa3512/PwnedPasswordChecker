@@ -52,7 +52,7 @@ namespace PwnedPasswordChecker.Test
             Assert.True(result.IsPwned);
             Assert.Equal(PwnedLevel.Pwned, result.PwnedLevel);
             Assert.Equal(1, result.TimesPwned);
-
+            Assert.Equal("21BD10018A45C4D1DEF81644B54AB7F969B88D65", result.PasswordHash);
         }
 
         

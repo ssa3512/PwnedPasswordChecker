@@ -10,11 +10,16 @@ namespace PwnedPasswordChecker
     {
         private HttpClient _client = new HttpClient();
 
-        public Uri BaseAddress
+        public HttpClientHandler()
         {
-            get { return _client.BaseAddress; }
-            set { _client.BaseAddress = value; }}
 
+        }
+
+        public HttpClientHandler(string baseAddress)
+        {
+            _client.BaseAddress = new Uri(baseAddress);
+        }
+        
         public HttpResponseMessage Get(string url)
         {
             return GetAsync(url).Result;

@@ -30,4 +30,10 @@ steps:
   inputs:
     codeCoverageEnabled: true
 
+- task: gitsync@1
+  displayName: 'GitSync - GitHub'
+  inputs:
+    GitRepoUrl: 'https://ssa3512@github.com/ssa3512/PwnedPasswordChecker.git'
+
+
 
